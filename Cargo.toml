@@ -1,0 +1,52 @@
+[package]
+name = "esp32c3-embassy"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+embedded-svc = { version = "0.26.1", default-features = false, features = [] }
+heapless = { version = "0.8.0", default-features = false }
+# toml-cfg = "0.1.3"
+# libm = "0.2.7"
+# cfg-if = "1.0.0"
+static_cell = { version = "2.0", features = ["nightly"] }
+embassy-net = { version = "0.2.1", features = ["nightly", "tcp", "udp", "dhcpv4", "medium-ethernet"] }
+# bleps = { git = "https://github.com/bjoernQ/bleps", package = "bleps", rev = "0db8fcb", features = ["macros"] }
+embassy-executor = { version = "0.3.3", package = "embassy-executor", features = ["nightly"] }
+embassy-time = { version = "0.1.3", features = ["nightly"] }
+esp-println = { version = "0.7.0",features=["esp32c3","log" ]}
+esp-backtrace = { version = "0.9.0", features = ["esp32c3","panic-handler", "exception-handler", "print-uart"] }
+embedded-hal-async = { version = "1.0.0-rc.1" }
+
+embedded-io-async = { version = "0.6.1" }
+
+[dependencies.esp-wifi]
+# A supported chip needs to be specified, as well as specific use-case features
+git="https://github.com/esp-rs/esp-wifi.git"
+features = [
+    "esp32c3", "wifi", "embassy-net","default","wifi-logs","utils","async"
+]
+
+[dependencies.esp32c3-hal]
+  git = "https://github.com/esp-rs/esp-hal.git"
+  rev = "22f14fd"
+  features = ["default", "async", "embassy","interrupt-preemption","embassy-executor-thread","embassy-time-timg0","embassy-integrated-timers","interrupt-preemption"] 
+
+# [dependencies.esp-hal-common]
+# git = "https://github.com/esp-rs/esp-hal.git"
+# rev = "22f14fd"
+# features = ["esp32c3","async","embassy-executor-thread","embassy-time-systick","interrupt-preemption","embassy-integrated-timers","debug"]  #"embassy-time-systick","embassy-time-timg0"
+
+[patch.crates-io]
+esp32c3-hal = { git = "https://github.com/esp-rs/esp-hal.git", rev = "22f14fd" }
+esp-hal-common = { git = "https://github.com/esp-rs/esp-hal.git", rev = "22f14fd" }
+
+[profile.dev.package.esp-wifi]
+opt-level = 3
+
+[profile.dev]
+lto = "off"
+[profile.release]
+lto = "off"
